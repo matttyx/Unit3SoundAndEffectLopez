@@ -5,12 +5,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public bool isOnGround = true;
-
-
-    private Rigidbody playerRb;
     public float jumpForce;
     public float gravityModifier;
-    private float speed = 30;
+
+    private Rigidbody playerRb;
+    
+    
     
 
     // Start is called before the first frame update
@@ -24,11 +24,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && isOnGround)
         {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
-            transform.Translate(Vector3.left * Time.deltaTime * speed);
+            
         }
     }
 
