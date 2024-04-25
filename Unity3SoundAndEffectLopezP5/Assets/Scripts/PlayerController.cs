@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem dirtParticle;
     public AudioClip jumpSound;
     public AudioClip crashSound;
+    public int jumpCount = 0;
+    //public bool doubleSpeed;
 
     private Rigidbody playerRb;
     private Animator playerAnim;
@@ -30,14 +32,18 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isOnGround && !gameOver)
+        if (Input.GetKeyDown(KeyCode.Space) && isOnGround && !gameOver && jumpCount<2)
         {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
             playerAnim.SetTrigger("Jump_trig");
             dirtParticle.Stop();
             playerAudio.PlayOneShot(jumpSound, 1.0f);
+            jumpCount += 1;
         }
+        JumpCountCheck();
+
+        
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -58,5 +64,18 @@ public class PlayerController : MonoBehaviour
             playerAudio.PlayOneShot(crashSound, 1.0f);
         }
         
+    }
+
+    private void JumpCountCheck()
+    {
+        if (jumpCount >= 2)
+        {
+            isOnGround = false;
+            jumpCount = 0;
+        }
+        else if(jumpCount== 1 && !gameOver)
+        {
+            isOnGround = true;
+        }
     }
 }
